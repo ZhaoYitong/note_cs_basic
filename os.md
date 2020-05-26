@@ -947,6 +947,229 @@ printf("B wins!");
 
 2. 基于软件的解决方案
 
-   
+   - 满足进程 Pi 和 Pj 之间互斥的经典的基于软件的解决方法 （1981）
+
+   - Use two shared data items
+
+   - 使用两个共享数据项
+
+     int turn;  <font color=red>// 指示该谁进入临界区</font>
+
+     boolean flag[];   <font color=red>// 指示进程是否准备好进入临界区</font>
+
+   - Code for ENTER_CRITICAL_SECTION
+
+     flag[i] = TRUE;
+
+     turn = j;
+
+     while (flag[j] && turn == j);
+
+   - Code for EXIT_CRITICAL_SECTION
+
+     flag[i] = FALSE;
+
+     
+
+     ```c
+     // 进程 Pi 的算法
+     do {
+         flag[i] = TRUE;
+         turn = j;
+         while (flag[j] && turn == j);
+         	CRITICAL SECTION
+         flag[i] = FALSE;
+         	REMAIDER SECTION
+     } while (TRUE)
+         
+         
+         
+     // 进程 Pj 的算法
+     do {
+         flag[j] = TRUE;
+         turn = i;
+         while (flag[i] && turn == i);
+         	CRITICAL SECTION
+         flag[j] = FALSE;
+         	REMAIDER SECTION
+     } while (TRUE)
+     ```
 
 3. 更高级的抽象
+
+- 硬件提供
+
+  - 像中断禁用，原子操作指令等
+
+- 操作系统提供更高级的编程抽象来简化并行编程
+
+  - 如: 锁, 信号量
+  - 从硬件原语中构建
+
+- 锁是一个抽象的数据结构
+
+  - 一个二进制状态（锁定/解锁), 两种方法
+  - Lock:: Acquire()  - 锁被释放前一直等待，然后得到锁
+  - Lock:: Release()  -释放锁, 唤醒任何等待的进程
+
+- 使用锁来编写临界区
+
+  <font color=red>lock_next_pid -> Acquire();</font>
+
+  <font color=blue>new_pid = next_pid++</font>
+
+  <font color=red>lock_next_pid -> Release();</font>
+
+- 大多数现代体系结构都提供特殊的原子操作指令
+
+  - 通过特殊的内存访问电路
+  - 针对单处理器和多处理器
+
+- Test-and-Set 测试和置位
+
+  - 从内存中读取值
+  - 测试该值是否为1（然后返回真或假）
+  - 内存值设置为1
+
+- 交换
+
+  - 交换内存中的两个值
+
+##### Test-and-Set
+
+```c
+boolean TestAndSet (boolean *target) {
+    boolean rv = *target;
+	*target = TRUE;
+    return rv;
+}
+
+void Exchange (boolean *a, boolean *b) {
+    boolean temp = *a;
+    *a = *b;
+    *b = temp;
+}
+```
+
+
+
+
+
+<b>具体实现</b>
+
+```c
+class Lock {
+    int value = 0;
+}
+```
+
+
+
+```c
+Lock::Acquire() {
+    while (test-and-set(value)); //spin
+}
+
+/**
+*  - 如果锁被释放，那么test-and-set读取0并将值设置为1  => 锁被设置为忙并且需要等待完成
+*  - 如果锁处于忙状态, 那么test-and-set读取1并将值设置为1 => 不改变锁的状态并且需要循环 (自旋spin)
+*/
+```
+
+
+
+```c
+Lock::Release() {
+    value = 0;
+}
+```
+
+
+
+
+
+- 使用忙等待的锁
+
+  - like test-and-set 实现的锁
+  - 线程在等待的时候消耗CPU周期
+
+  ```c
+  // 忙等待
+  Lock::Acquire() {
+      while (test-and-set(value)); //spin
+  }
+  
+  
+  Lock::Release() {
+      value = 0;
+  }
+  ```
+
+  
+
+  ```c
+  // 无忙等待
+  class Lock {
+      int value = 0;
+      WaitQueue q;
+  }
+  
+  Lock::Acquire() {
+      while(test-and-set(value)) {
+          add this TCB to wait queue q;
+          schedule();
+      }
+  }
+  
+  Lock::Release() {
+      value = 0;
+      remove one thread t from q;
+      wakeup();
+  }
+  ```
+
+
+
+- 共享数据 （初始化为0）
+
+  - int lock = 0；
+
+- 线程 Ti
+
+  ```c
+  int key;
+  do {
+      key = 1;
+      while (key == 1) exchange(lock, key);
+      	critical section
+      lock = 0;
+      	remainder section
+  }
+  ```
+
+
+
+- 优点
+  - 适用于单处理器或者共享主存的多处理器中任意数量的进程
+  - 简单并且容易证明
+  - 可以用于支持多临界区
+- 缺点
+  - 忙等待消耗处理器时间
+  - 当进程离开临界区并且多个进程在等待的时候可能导致饥饿
+  - <font color=red>死锁</font>
+    - 如果一个低优先级的进程拥有临界区并且一个高优先级进程也需求，那么高优先级进程会获得处理器并等待临界区
+- 锁是更高等级的编程抽象
+  - 互斥可以使用锁来实现
+  - 通常需要一定等级的硬件支持
+- 常用三种实现方法
+  - 禁用中断 (仅限于单处理器)
+  - 软件方法（复杂）
+  - 原子操作指令（单处理器或多处理器均可）
+- 可选的实现内容
+  - 有忙等待
+  - 无忙等待
+
+
+
+#### 信号量
+
