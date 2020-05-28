@@ -536,7 +536,6 @@ o ---- 页内偏移 (S位，每页有2^S字节)
 - 被其他进程所杀(强制性的)
 
 <center><font color=green>状态变化图</font></center>
-
 ```mermaid
 graph LR
     new((New))
@@ -640,7 +639,6 @@ graph LR
 
 
 <center><b><font color=green>线程 = 进程 ---- 共享资源</font></b></center>
-
 ##### 线程的优点:
 
 - 一个进程中可以同时存在多个线程
@@ -654,7 +652,6 @@ graph LR
 
 
 <center><b><font color=green>进程与线程的比较</font></b></center>
-
 - 进程是资源分配单位，线程是CPU调度单位
 - 进程拥有一个完整的资源平台，而线程只独享必不可少的资源，如寄存器和栈
 - 线程同样具有就绪、阻塞和执行三种基本状态，同样具有状态之间的转换
@@ -684,7 +681,6 @@ Solaris  (LightWeight Process)
 
 
 <center><font color=green><b>用户线程与内核线程的对应关系</b></font></center>
-
 - 多对一  (多个 user thread 对应 一个 kernel thread)
 - 一对一 (一个 user thread 对应一个 kernel thread)
 - 多对多 (n个 user thread 对应 m个 kernel thread)
@@ -694,7 +690,6 @@ Solaris  (LightWeight Process)
 
 
 <center><font color=green><b>用户线程</b></font></center>
-
 在用户空间实现的线程机制, 它不依赖于操作系统的内核，由一组用户级的线程库函数来完成线程的管理，包括进程的创建、终止、同步和调度等。
 
 - 由于用户线程的维护由相应进程来完成（通过线程库函数），不需要操作系统内核了解用户线程的存在，可用于不支持线程技术的多进程操作系统;
@@ -713,7 +708,6 @@ Solaris  (LightWeight Process)
 
 
 <center><font color=green><b>内核线程</b></font></center>
-
 指在操作系统的内核当中实现的一种线程机制，由操作系统的内核来完成线程的创建、终止和管理。
 
 - 在支持内核线程的操作系统中，由内核来维护进程和线程的上下文信息(PCB和TCB);
@@ -727,7 +721,6 @@ Solaris  (LightWeight Process)
 
 
 <center><font color=green><b>轻量级线程（LightWeight Process）</b></font></center>
-
 它是内核支持的用户线程。一个进程可有一个或多个轻量级进程，每个量级进程由一个单独的内核线程来支持。（Solaris/Linux)
 
 
@@ -1172,4 +1165,36 @@ Lock::Release() {
 
 
 #### 信号量
+
+
+
+- 抽象数据类型
+  - 一个整形（sem），两个原子操作  <font color=brown>// semaphore</font>
+    - P(): sem减1， 如果 sem < 0, 等待， 否则继续
+    - Y(): sem 加1， 如果 sem<=0, 唤醒一个等待的P
+
+sem 表示可用 的资源数目， sem 等于0表示资源完全被占用，此时一切还是正常的样子
+
+![avatar](C:\Users\wode2\Desktop\note_cs_basic\lib\img\semaphore_init.PNG)
+如上，初始化时 sem = 2;
+
+初始依次进入两辆车，都进行了 P()， sem --
+
+
+
+![avatar](C:\Users\wode2\Desktop\note_cs_basic\lib\img\semaphore_p_get_in.PNG)
+
+来了一个新车，进行 P(),  sem -- , 这时 sem (-1) < 0  开始等待
+
+![avatar](C:\Users\wode2\Desktop\note_cs_basic\lib\img\semaphore_one_leave.PNG)
+
+其中一个车离开，  进行V(), sem ++,  这时sem(0) <=0; 唤醒一个等待的P
+
+![avatar](C:\Users\wode2\Desktop\note_cs_basic\lib\img\semaphore_one_wait_to_get_in.PNG)
+
+等待的P 这时可以进入
+
+
+
+
 
