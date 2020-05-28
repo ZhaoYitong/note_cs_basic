@@ -1175,26 +1175,109 @@ Lock::Release() {
 
 sem 表示可用 的资源数目， sem 等于0表示资源完全被占用，此时一切还是正常的样子
 
-![avatar](C:\Users\wode2\Desktop\note_cs_basic\lib\img\semaphore_init.PNG)
+![avatar](lib\img\semaphore_init.PNG)
 如上，初始化时 sem = 2;
 
 初始依次进入两辆车，都进行了 P()， sem --
 
 
 
-![avatar](C:\Users\wode2\Desktop\note_cs_basic\lib\img\semaphore_p_get_in.PNG)
+![avatar](lib\img\semaphore_p_get_in.PNG)
 
 来了一个新车，进行 P(),  sem -- , 这时 sem (-1) < 0  开始等待
 
-![avatar](C:\Users\wode2\Desktop\note_cs_basic\lib\img\semaphore_one_leave.PNG)
+![avatar](lib\img\semaphore_one_leave.PNG)
 
 其中一个车离开，  进行V(), sem ++,  这时sem(0) <=0; 唤醒一个等待的P
 
-![avatar](C:\Users\wode2\Desktop\note_cs_basic\lib\img\semaphore_one_wait_to_get_in.PNG)
+![avatar](lib\img\semaphore_one_wait_to_get_in.PNG)
 
 等待的P 这时可以进入
 
 
 
 
+
+
+
+#### 信号量的使用
+
+- 信号量是整数
+- 信号量是被保护的变量
+  - 初始化完成后，唯一改变一个信号量的值得方法是通过P() 和 V()
+  - 操作必须是原子
+- <font color=red>P() 能够阻塞</font>， V()不会阻塞
+- 假定的信号量是"公平的"
+  - 没有线程被阻塞在P()仍然堵塞, 如果V()被无限频繁调用(在同一个信号量)
+  - 实践中, `FIFO`经常被使用
+
+
+
+- 两种类型信号量
+
+  - <font color=red>二进制信号量</font>: 可以是 0 或 1
+  - <font color=red>一般/计数信号量</font>: 可取任何非负值
+  - 两者相互表现(给定一个可以实现另一个)
+
+- 信号量可以用在2个方面
+
+  - 互斥
+  - 条件同步（调度约束 --- 一个线程等待另一个线程的事情发生）
+
+- 用二进制信号量实现的互斥
+
+  ```c
+  mutex = new Semaphore(1)
+  ```
+
+  
+
+  ```c
+  mutex -> P();
+  ...
+      Critical Section;
+  ...
+  mutex -> V();
+  ```
+
+  
+
+- 用二进制信号量实现的调度约束
+
+  ```c
+  condition = new Semaphore(0);
+  ```
+
+  
+
+```c
+// Thread A                       
+
+***
+    condition -> P();
+***
+    
+// Thread B
+
+***
+    condition -> V();
+***
+```
+
+- P() 等待, V() 发出信号
+- 一个线程等待另一个线程处理事情
+  - 如生产东西或消费东西
+  - 互斥（锁机制）是不够的
+- Example: 有界缓冲区的生产者 - 消费者问题
+  - 一个或多个<font color=red>生产者</font>产生数据将数据放在一个缓冲区里
+  - 单个<font color=red>消费者</font>每次从缓冲区取出数据
+  - 在任何一个时间<font color=red>只有一个</font>生产者或消费者可以访问该缓冲区
+
+```mermaid
+graph LR
+
+Producer --> Buffer
+
+Buffer --> Consumer
+```
 
