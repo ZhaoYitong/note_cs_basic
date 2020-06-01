@@ -1176,7 +1176,7 @@ Lock::Release() {
 sem 表示可用 的资源数目， sem 等于0表示资源完全被占用，此时一切还是正常的样子
 
 ![avatar](lib\img\semaphore_init.PNG)
-如上，初始化时 sem = 2;
+如上，初始化时 sem = 2？;
 
 初始依次进入两辆车，都进行了 P()， sem --
 
@@ -1281,3 +1281,282 @@ Producer --> Buffer
 Buffer --> Consumer
 ```
 
+
+
+
+
+
+
+
+
+
+
+
+
+#### 信号量的实现
+
+使用硬件原语
+
+​	禁用中断
+
+​	原子指令
+
+类似锁
+
+例如: 使用 ‘禁用中断’
+
+
+
+```c
+class Semaphore {
+    int sem;
+    WaitQueue q;
+}
+
+
+Semaphore::P() {
+    sem--;
+    if(sem < 0 ) {
+        Add this thread to q;
+        block(p);
+    }
+}
+
+Semaphore::V() {
+    sem++;
+    if (sem <= 0) {
+        Remove a thread t from q;
+        wakeup(t);
+    }
+}
+```
+
+
+
+- 信号量的双用途
+  - 互斥和条件同步
+  - 但等待条件是独立的互斥
+- 读/开发代码比较困难
+  - 需要非常精通信号量
+- 不能处理死锁
+
+
+
+
+
+#### 管程
+
+- 目的: 分离互斥和条件同步的关注
+
+- 定义
+
+  - 一个锁: 指定临界区
+  - 0或者多个条件变量: 等待/通知信号量用于管理并发访问共享数据
+
+- 一般方法
+
+  - 收集在对象/模块中的相关共享数据
+  - 定义方法来访问共享数据
+
+  
+
+- Lock
+  - Lock::Acquire()  - 等待直到锁可用, 然后抢占锁
+  - Lock::Release()  - 释放锁,唤醒等待者如果有
+- Condition Variable
+  - 允许等待状态进入临界区
+    -  允许处于等待（睡眠）的线程进入临界区
+    - 某个时刻原子释放锁进入睡眠
+  - Wait()  operation
+    - 释放锁, 睡眠。 重新获得锁返回后
+  - Signal() operation (or broadcast()  operation)
+    - 唤醒等待者(或者所有等待者)，如果有
+
+
+
+
+
+- 实现
+
+  - 需要维持每个队列
+
+  - 线程等待的条件signal()
+
+    ```c
+    Class Condition {
+        int numWaiting = 0;
+        WaitQueue q;
+    }
+    
+    Condition::Wait(lock) {
+        numWaiting ++;
+        Add this thread t to q;
+        release(lock); // 让当前生产者释放锁, 使得其他线程有可能进入管程中执行
+        schedule(); // need mutex
+        require(lock);
+    }
+    
+    
+    Condition::Signal() {
+        if (numWaiting > 0) {
+            Remove a thread t from q;
+            wakeup(t); //need mutex
+            numWaiting --;
+        }
+    }
+    ```
+
+    
+
+
+
+
+
+管程解决生产者消费者问题
+
+```c
+classBoundedBuffer {
+    ...
+        Lock lock;
+    	int count = 0; // buffer 是空的
+    	Condition notFull, notEmpty;
+}
+
+
+BoundedBuffer::Deposit(c) {
+    lock -> Acquire();
+    while (count == n)
+        notFull, Wait(&lock); // 当前已经满了，需要等待
+    Add c to the buffer;
+	count ++;
+	notEmpty.Signal; //一旦有
+	lock -> Release();
+}
+
+BoundedBuffer::Remove(c)  {
+    lock -> Acquire();
+    while (count == 0) // Buffer 空的时候，执行 wait
+        notEmpty.Wait(&lock);
+    Remove c from buffer;
+    count --;
+    notFull.Signal(); // 一旦有等待的线程，则被唤醒
+    lock -> Release();
+}
+```
+
+
+
+<font color=orange><b>T1</b></font>: 左侧部分
+
+<font color=blue><b>T2</b></font>: 右侧部分
+
+
+
+![avatar](lib\img\Hasen-style__Hoare-style.png)
+
+
+
+![avatar](lib\img\Hasen-style__Hoare-style_code.png)
+
+  
+
+
+
+
+
+#### 经典同步问题系列
+
+- 动机
+  - 共享数据的访问
+- 两种类型使用者
+  - 读者: 不需要修改数据
+  - 写者: 读取和修改数据
+- 问题的约束
+  - 允许同一时间有多个读者，但在任何时候只有一个写者
+  - 当没有写者是读者才能访问数据
+  - 当没有读者和写者时写者才能访问数据
+  - 在任何时候只能有一个线程可以操作共享变量
+- 多个并发进程的数据集共享
+  - 读者  - 只读数据集; 他们不执行任何更新
+  - 写者  - 可以读取和写入
+- 共享数据
+  - 数据集
+  - 信号量 CountMutex 初始化为1
+  - 信号量 WriteMutex 初始化为1
+  - 整数 Rcount 初始化为 0  <font color=brown>// Read Count</font>
+
+
+
+```c
+/** Writer **/
+sem_wait(WriteMutex); // P操作
+
+	write;
+sem_post(WriteMutex); // V操作
+    
+    
+    
+    
+/** Reader **/
+sem_wait(CountMutex) // 针对多个读者的问题, 对Rcount 增加 CountMutex 的 P 操作
+    if (Rcount == 0) // 可能需要等待写者，也可能是第一个读者
+        sem_wait(WriteMutex);
+    ++Rcount; // Rcount > 0, 说明已经有读，那么可以继续读
+sem_post(CountMutex); // 改次结束后，对Rcount增加 CountMutex 的 V 操作
+
+read;
+
+sem_wait(CountMutex); // 同上, 对 Rcount P操作
+    --Rcount;
+    if (Rcount == 0) // 意味着已经读完了，告诉写者(如果有写者)可以写了
+        sem_post(WriteMutex);
+sem_post(CountMutex); // 同上，对 Rcount V操作
+```
+
+
+
+`基于读者优先策略`  <b>VS</b> `基于写者优先策略`
+
+基于读者优先策略的方法，只要有一个读者处于活动状态，后来的读者都会被接纳。如果读者源源不断出现，那么写者就始终处于阻塞状态
+
+
+
+基于写者优先，同上
+
+
+
+`使用管程实现写者优先的读者写者问题`
+
+进行读操作时，考虑当前是否有写者，写者分两类: 一是正在写的，二是等待队列中的写者
+
+- Basic structure: two methods
+
+```c
+Database::Read() {
+    Wait until no writers;
+    read database;
+    check out - wake up waiting writers;
+}
+
+Database::Write() {
+    Wait until no readers/writers;
+    write database;
+    check out - wake up waiting readers/writers
+}
+```
+
+
+
+- Monitor's State variables
+
+  ```c
+  AR = 0;            //# of active readers
+  AW = 0;            //# of active writers
+  WR = 0;            //# of waiting readers
+  WW = 0;            //# of waiting writers
+  Condition okToRead;
+  Condition okToWrite;
+  Lock lock;
+  ```
+
+  
