@@ -1611,6 +1611,14 @@ Database::Write() {
       DoneRead();
   }
   
+  Public Database::Write() {
+      // Wait until no readers/writers;
+      Start Write();
+      write database;
+      // check out - wake up waiting readers/writers;
+      DoneWrite();
+  }
+  
   
   Private Database::StartRead() {
       lock.Acquire(); // 确保只有一个函数能进入管程中执行
@@ -1657,4 +1665,138 @@ Database::Write() {
       lock.Release();
   }
   ```
+
+
+
+
+
+![avatar](lib\img\share_data_model.png)
+
+
+
+##### 思路1 哲学家自己如何解决
+
+指导原则: 要么不拿，要么就拿两把叉子
+
+​	S1	思考中
+
+​	S2	进入饥饿状态
+
+​	S3	如果左邻居或右邻居正在进餐, 等待; 否则; 转S4
+
+​	S4	拿起两把叉子
+
+​	S5	吃面条...
+
+​	S6	放下左边的叉子
+
+​	S7	放下右边的叉子
+
+​	S8	新的循环开始，转S1
+
+
+
+##### 思路2 计算机程序解决
+
+指导原则: 不能浪费CPU时间l; 进程间相互通信
+
+​	S1	思考中...
+
+​	S2	进入饥饿状态
+
+​	S3	如果左邻居或右邻居正在进餐，进程进入阻塞态, 否则转S4
+
+​	S4	拿起两把叉子
+
+​	S5	吃面条
+
+​	S6	放下左边的叉子, 看看左邻居现在能否进餐
+
+​				（饥饿状态，两把叉子都在）, 若能则唤醒之
+
+​	S7	放下右边的叉子, 看看右邻居现在能否进餐
+
+​				（饥饿状态，两把叉子都在）, 若能则唤醒之
+
+​	S8	新的一天开始，转S1
+
+
+
+##### 思路3 如何编写程序
+
+<font color=red>1. 必须有数据结构，来描述每个哲学家的当前状态</font>
+
+```c
+#define	N			5			// 哲学家个数
+#define LEFT		i			// 第i个哲学家的左邻居
+#define RIGHT		(i+1)%N		// 第i个哲学家的右邻居
+#define THINKING	0			// 思考状态
+#define HUGRY		1			// 饥饿状态
+#define EATING		2			// 进餐状态
+int	state[N];					// 记录每个人的状态
+```
+
+<font color=red>2. 该状态时一个临界资源，各个哲学家对它的访问应该互斥地进行----进程互斥</font>
+
+```c
+semaphore 	mutex;				// 互斥信号量, 初值1
+```
+
+<font color=red>3. 一个哲学家吃饱后, 可能要唤醒它的左邻右舍,两者之间存在着同步关系----进程同步</font>
+
+```c
+semaphore 	s[N];				// 同步信号量, 初值0
+```
+
+
+
+<center><font color=blue>函数philosopher的定义</font></center>
+
+```c
+void philosopher(int i) { 			// i 的取值: 0到N-1
+    while(TRUE) {					// 封闭式循环
+        S1 ----> think();			// 思考中
+     S2-S4 ---->take_forks(i);		// 拿到两把叉子或被阻塞
+        S5 ----> eat();				// 吃面条中....
+     S6-S7 ---->put_forks(i);		// 把两把叉子放回原处
+    }
+}
+```
+
+
+
+<center><font color=blue>函数take_forks</font></center>
+
+```c
+// 功能: 要么拿到两把叉子, 要么被阻塞起来
+
+void take_forks(int i) {			// i 的取值: 0到N-1
+    P(mutex);						// 进入临界区
+    state[i] = HUNGRY;				// 
+    test_take_left_right_forks(i);	// 试图拿两把叉子
+    V(mutex);						// 退出临界区
+    P(s[i]);						// 没叉子便阻塞
+}
+
+
+```
+
+
+
+<center><font color=blue>函数test_take_left_right_forks</font></center>
+
+```c
+void test_take_left_right_forks(int i) {	// i: 0~N-1
+    if (state[i] == HUNGRY &&     			// i: 我自己, or 其他人
+        state[LEFT] !== EATING &&			
+       	state[RIGHT] !== EATING) {
+        state[i] = EATING;					// 两把叉子到手
+        V(s[i]);							// 通知第i人可以吃饭了
+    } 
+}
+```
+
+
+
+
 
