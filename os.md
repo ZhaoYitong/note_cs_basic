@@ -1600,5 +1600,61 @@ Database::Write() {
   Condition okToRead;
   Condition okToWrite;
   Lock lock;
+  
+  
+  Public Database::Read() {
+      //Wait until no writers;
+      StartRead();
+      read database;
+      // check out - wake up
+      waiting writers;
+      DoneRead();
+  }
+  
+  
+  Private Database::StartRead() {
+      lock.Acquire(); // 确保只有一个函数能进入管程中执行
+      while((AW+WW)>0) { // 有写者时
+          WR++;
+          okToRead.wait(&lock);
+          WR--;
+      }
+      AR++;
+      lock.Release();
+  }
+  
+  
+  Private Database::DoneRead() {
+      lock.Acquire();
+      	AR--;
+      	if (AR == 0 && WW > 0) { // 当前无 reader 且 没有等待的 writer 
+              okToWrite.signal();
+          }
+      lock.Release();
+  }
+  
+  
+  Private Database::StartWrite() {
+      lock.Acquire();
+      	while((AW+AR)>0)  { // 写优先，这里 WR不考虑
+              WW++;
+              okToWrite.wait(&lock);
+              WW--;
+          }
+      	AW++;
+      lock.Release();
+  }
+  
+  
+  Private Database::DoneWrite() {
+      lock.Acquire();
+      	AW--;
+      	if(WW > 0) {
+              okToWrite.signal();
+          } else if (WR > 0) {
+              okToRead.broadcast(); // 唤醒
+          }
+      lock.Release();
+  }
   ```
 
