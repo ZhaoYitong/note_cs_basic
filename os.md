@@ -1281,6 +1281,49 @@ Producer --> Buffer
 Buffer --> Consumer
 ```
 
+- 正确性要求
+  - 在任何一个时间只能有一个线程操作缓冲区（互斥）
+  - 当缓冲区为空, 消费者必须等待生产者 （调度/同步约束）
+  - 当缓冲区满，生产者必须等待消费者 （调度/同步约束）
+- 每个约束用一个单独的信号量
+  - 二进制信号量互斥
+  - 一般信号量 fullBuffers
+  - 一般信号量 emptyBuffers
+
+```c
+Class BoundBuffer {
+    mutex = new Semaphore(1); // 处理互斥问题
+    fullBuffers = new Semaphore(0); // 初始 buffer 为空 -- 实际(占用)产生了多少
+    emptyBuffers = new Semaphore(n); // 生产者可填充 buffer 数 -- 实际空缺了多少
+}
+
+
+BoundedBuffer:: Deposit(c) {
+    emptyBuffer -> P(); // 首先看buffer是否满 能生产多少个
+    mutex -> P(); // 使得往buffer添加数据的操作是 互斥的
+    Add c to the buffer;
+    mutex -> V(); // 同上， 保证对buffer操作时，只有一个线程在执行，类似加锁
+    fullBuffers -> V(); // fullBuffers semaphore 初始值是 0, 生产者执行一次 V(),     	 semaphore ++, 告诉消费者可以取出 
+    
+}
+
+// 针对 Remove 下的 fullBuffer, 考虑两种情况(sem 初始值为): 
+//  1. 生产者先执行，则 fullBuffers -> V() 执行 sem ++, 消费者后执行, 则 fullBuffers -> P() 执行 sem --, 此时 sem=0; 可以执行
+//  2. 消费者先执行，则 fullBuffers -> P() 执行 sem --, 此时sem=-1 (sem < 0); 需要等待
+
+// 针对 Remove 下的 emptyBuffer,
+// 如果 生产者执行 emptyBuffer -> P() 过多， 则需要消费者 执行 emptyBuffer 把阻塞的进程唤起
+BoundedBuffer::Remove(c) {
+    fullBuffers -> P(); 
+    mutex -> P();
+    Remove c from buffer;
+    mutex -> V();
+    emptyBuffer -> V();
+}
+```
+
+
+
 
 
 
@@ -1559,4 +1602,3 @@ Database::Write() {
   Lock lock;
   ```
 
-  
