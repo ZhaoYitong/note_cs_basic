@@ -1798,5 +1798,86 @@ void test_take_left_right_forks(int i) {	// i: 0~N-1
 
 
 
+<center><font color=blue>函数put_forks</font></center>
+
+```c
+// 功能: 把两把叉子放回原处，并在需要的时候，唤醒左邻右舍
+
+void put_forks(int i) {						// i 的取值: 0到N-1
+    P(mutex);
+    state[i] = THINKING;					// 交出两把叉子
+    test_take_left_right_forks(LEFT);		// 看左邻居能否进餐
+    test_take_left_right_forks(RIGHT);		// 看右邻居能否进餐
+	V(mutex);								// 退出临界区
+}
+```
 
 
+
+
+
+
+
+#### 死锁
+
+- 死锁处理方法
+  - Deadlock Prevention				(死锁预防)
+  - Deadlock Avoidance                 (死锁避免)
+  - Deadlock Detection                  (死锁检查)
+  - Recovery from Deadlock          (死锁恢复)
+
+- 一组阻塞的进程持有一种资源等待获取另一个进程所占有的一个资源
+  - 系统有两个磁带驱动器
+  - P1和P2各一个, 都需要另外一个
+
+
+
+
+
+- 系统模型
+
+  - 资源类型R1， R2, ......, Rm
+
+    CPU cycles, memory space, I/O devices
+
+  - 每个资源类型Ri 有 Wi实例
+
+  - 每个进程使用资源如下:
+
+    - request/get  <-- free resource
+    - use/hold       <-- requested/used resource
+    - release          <-- free resource
+
+
+
+<center><font color=red>可重复使用的资源</font></center>
+
+- 在一个时间只能一个进程使用且不能被删除
+- 进程获得资源，后来释放由其他进程重用
+- 处理器，I/O通道，主和副存储器，设备和数据结构，如文件，数据库和信号量
+- 如果每个进程拥有一个资源并请求其他资源，可能发生死锁
+
+
+
+<center><font color=red>使用资源</font></center>
+
+- 创建和销毁
+- 在I/O缓冲区的中断，信号，消息，信息
+- 如果接收消息阻塞可能会发生死锁
+- 可能少见的组合事件会引起死锁
+
+
+
+<center><font color=red>资源分配图</font></center>
+
+一组顶点V和边E的集合
+
+- V有两种类型:
+  - P = {P1, P2, ..., Pn}, 集合包括系统中的所有进程
+  - R = {R1, R2，.... Rm}, 集合包括系统中的所有资源类型
+- requesting/claiming edge    - directed edge  Pi  --> Rj
+- assignment/holding edge    - directed edge   Rj --> Pi
+
+
+
+![avatar](C:\Users\Kerouac\Desktop\File\node_cs_basic\lib\img\deadlock_resource.png)
