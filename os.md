@@ -1944,5 +1944,36 @@ void put_forks(int i) {						// i 的取值: 0到N-1
   - 如果Pi 的资源的需求不是立即可用，那么Pi可以等到所有Pj完成
   - 当Pi完成后，Pi+1 可以得到所需要的资源，执行，返回所分配的资源，并终止
   - 同样的方式，Pi+2, Pi+3 和Pn 能获得其所需的资源
-- 
 
+![deadlock_safe_unsafe_area](lib\img\deadlock_safe_unsafe_area.PNG)
+
+![avatar](lib\img\deadlock_prevention.png)
+
+
+
+
+
+- 银行家算法 (Banker's Algorithm)
+
+  - 多个实例
+
+  - 每个进程必须能最大限度地利用资源
+
+  - 当一个进程请求一个资源，就不得不等待
+
+  - 当一个进程获得所有的资源就必须在一段有限的时间释放它们
+
+    基于上述，银行家算法通过尝试寻找允许每个进程获得的最大资源并结束(把资源返还给系统)的进程请求的一个理想执行时序，来决定一个状态是否是安全的
+
+    不存在这满足要求的执行时序的状态都是不安全的
+
+
+
+<font color=brown>银行家算法数据结构</font>
+
+n = 进程数量， m = 资源类型数量
+
+- Max (总需求量): n x m矩阵。如果 Max [i, j] = k, 表示进程Pi 最多请求资源类型Rj的k个实例。
+
+- Available (剩余空闲量)： 长度为m的向量。如果Available [j] = k, 有k个类型Rj的资源实例可用。
+- Allocation(已分配量): n x m矩阵。如果Allocation[i, j] = k, 则Pi当前分配了k个Rj的实例。
