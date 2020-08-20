@@ -1976,4 +1976,32 @@ n = 进程数量， m = 资源类型数量
 - Max (总需求量): n x m矩阵。如果 Max [i, j] = k, 表示进程Pi 最多请求资源类型Rj的k个实例。
 
 - Available (剩余空闲量)： 长度为m的向量。如果Available [j] = k, 有k个类型Rj的资源实例可用。
+
 - Allocation(已分配量): n x m矩阵。如果Allocation[i, j] = k, 则Pi当前分配了k个Rj的实例。
+
+- Need (未来需要量): n x m 矩阵。 如果 Need[i, j] = k, 则Pi 可能需要至少k个Rj 实例完成任务
+
+  <font color=red>Need[i,j] = Max[i,j] - Allocation[i,j]</font>
+
+1. Work 和 Finish 分别是长度为 m 和 n 的向量。
+
+   初始化: 
+
+   ​	Work = Available								// 当前资源剩余量
+
+   ​	Finish [i] = false for i - 1, 2, ...., n     // 线程 i 没结束
+
+2.  寻找   // 接下来找出 Need 比 Work 小的 进程 i
+
+   （a) Finish [i] = false
+
+     (b) Need i < Work
+
+   没有找到对应的 i 转到 4
+
+3.  Work = Work + Allocation    //  进程 i 的资源需求量小于当前剩余空闲资源量 
+
+   Finish[i] = true                         // 所以配置给它再回收
+
+   转到 2 
+
