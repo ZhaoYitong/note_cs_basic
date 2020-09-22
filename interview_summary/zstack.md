@@ -9,9 +9,15 @@ https://docs.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-
 
 #### JS
 
-1. 谈一谈继承的概念 
+1. 谈一谈继承的概念 
 
-prototype  constructor ?
+prototype  constructor ?
+
+angularjs
+https://github.com/angular/angular.js/wiki/Understanding-Scopes#javascript-prototypal-inheritance
+
+Angular
+....
 
 
 
