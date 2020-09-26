@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div>This is my first movie</div>
+
+    <script src="../node_modules/art-template/lib/template-web.js"></script>
+    <script type="text/template" id="tpl">
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <meta http-equiv="X-UA-Compatible" content="ie=edge">
+            <title>Document</title>
+        </head>
+        <body>
+            <p>My name is {{ name }}</p>
+            <p>I am {{ age }} years old</p>
+            <h1>I am from {{ province }}</h1>
+            <p>I like {{each hobbies}} {{ $value }} {{/each}}</p>
+        </body>
+        </html>
+    </script>
+</body>
+</html>

@@ -1,0 +1,3 @@
+require(['moduleA', 'moduleB'], function() {
+    
+})

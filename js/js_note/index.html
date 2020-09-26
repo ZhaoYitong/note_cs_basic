@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        function User() {}
+        User.prototype.name = function() {
+            console.log("user.name");
+        }
+
+        function Admin() {}
+        
+        Admin.prototype = Object.create(User.prototype);
+        Admin.prototype.constructor = Admin;
+        console.log(Object.getOwnPropertyDescriptor(Admin.prototype, 'constructor'));
+        Admin.prototype.role = function() {
+            console.log("admin.role");
+        }
+
+        console.log(Admin.prototype);
+
+        let a = new Admin();
+        let b = new a.__proto__.constructor();
+        console.log(a.__proto__);
+        console.log(a.prototype);
+
+    
+    </script>
+</body>
+</html>
