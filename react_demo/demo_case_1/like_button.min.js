@@ -1,1 +1,0 @@
-"use strict";const e=React.createElement;class LikeButton extends React.Component{constructor(e){super(e),this.state={liked:!1}}render(){return this.state.liked?"You liked this.":e("button",{onClick:()=>this.setState({liked:!0})},"Like")}}const domContainer=document.querySelector("#like_button_container");ReactDOM.render(e(LikeButton),domContainer);
