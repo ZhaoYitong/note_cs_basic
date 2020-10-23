@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0;user-scalable=no">
+    <title>rem</title>
+    <style type="text/css">
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        #box {
+            width: 0.2rem;
+            height: 0.2rem;
+            background: red;
+        }
+    </style>
+</head>
+<body>
+    <div id="box">
+
+    </div>
+</body>
+<script type="text/javascript">
+    window.onload = function () {
+        // get width of screen area
+        var width = document.documentElement.clientWidth;
+
+        var htmlNode = document.querySelector('html');
+
+        // set fontsize
+        htmlNode.style.fontSize = `${width}px`;
+    }
+</script>
+</html>

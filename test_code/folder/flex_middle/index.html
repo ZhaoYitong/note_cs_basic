@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>flex实现元素水平垂直居中 (新版本与老版本)</title>
+    <style type="text/css">
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        #wrap1 {
+            width: 500px;
+            height: 500px;
+            background: grey;
+            position: relative;
+        }
+        #wrap1 .box {
+            width: 200px;
+            height: 200px;
+            background: pink;
+
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            margin: auto;
+        }
+
+        #wrap2 {
+            width: 500px;
+            height: 500px;
+            background: grey;
+            position: relative;
+        }
+        #wrap2 .box {
+            width: 200px;
+            height: 200px;
+            background: pink;
+
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin-left: -100px;
+            margin-top: -100px;
+        }
+
+        #wrap3 {
+            width: 500px;
+            height: 500px;
+            background: grey;
+            position: relative;
+        }
+        #wrap3 .box {
+            width: 200px;
+            height: 200px;
+            background: pink;
+
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        #wrap4 {
+            width: 500px;
+            height: 500px;
+            background: grey;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        #wrap4 .box {
+            width: 200px;
+            height: 200px;
+            background: pink;
+        }
+
+        #wrap5 {
+            width: 500px;
+            height: 500px;
+            background: grey;
+            display: -webkit-box;
+            -webkit-box-pack: center;
+            -webkit-box-align: center;
+        }
+        #wrap5 .box {
+            width: 200px;
+            height: 200px;
+            background: pink;
+        }
+    </style>
+</head>
+<body>
+    <div id="wrap1">
+        <div class="box">1</div>
+    </div>
+
+    <br>
+
+    <div id="wrap2">
+        <div class="box">2</div>
+    </div>
+
+    <br>
+
+    <div id="wrap3">
+        <div class="box">3</div>
+    </div>
+
+    <br>
+
+    <div id="wrap4">
+        <div class="box">4</div>
+    </div>
+
+    <br>
+
+    <div id="wrap4">
+        <div class="box">5</div>
+    </div>
+</body>
+</html>

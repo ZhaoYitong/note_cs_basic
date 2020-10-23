@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style type="text/css">
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        #box {
+            width: 0.5rem;
+            height: 0.5rem;
+
+            border-bottom: 1px solid #000000;
+        }
+    </style>
+
+    <!-- 像素比 = 物理像素 / css 像素 -->
+</head>
+<body>
+    <div id="box"></div>
+
+    <!-- 1px 
+    meta  initial-scale="1.0" 缩放比
+    -->
+</body>
+
+<script type="text/javascript">
+    window.onload = function () {
+        // 像素比
+        var dpr = window.devicePixelRatio;
+        console.log(dpr);
+
+        // 缩放比例
+        var scale = 1/dpr;
+
+        var width = document.documentElement.clientWidth;
+
+        // 获取 meta 标签
+        var metaNode = document.querySelector('meta[name="viewport"]');
+
+        metaNode.setAttribute('content', `width=device-width, initial-scale=${scale}`);
+
+        // 页面中元素宽度，高度，比例反向乘回来
+        var htmlNode = document.querySelector('html');
+        htmlNode.style.fontSize = width * dpr + 'px';
+    }
+</script>
+</html>
