@@ -49,10 +49,31 @@ CMP多云混合编排
 
 ### 云应用编排工具 Terraform & Cloudify
 - Terraform
+是 HashiCorp 推出的基础设施即代码工具。
 使用声明式的配置语言(HCL/JSON)来实现外部资源的通过一管理(包括用户想要实现的CRUD操作)工具
+具备以下优势:
 
-- Cloudify 
-。。。。。。 refs: https://docs.cloudify.co/latest/about/
+• 基于 IaC（基础设施即代码，Infrastructure as Code）的设计，可以将基础设施以一种领域特定语言描述出来，消除了在基础设施自动化时描述语义上的歧义，同时减轻了人为因素造成的不确影响。
+
+• Terraform 在执行编排动作前，会生成一份可读性良好的执行计划，关键基础设施的变更可以得到充分审查，保证了基础设施的可靠性。
+
+• 基于 DAG（有向无环图，Directed Acyclic Graph）描述资源与资源之间的关系，由于 DAG 良好的拓扑性质，当资源属性与资源关系发生改变时，变更动作将被充分并行地执行。
+
+- Cloudify
+一款开源的多云多节点编排工具。Cloudify使组织能够将其现有基础架构与云原生和分布式边缘资源一起自动化，从而使组织轻松过渡到公有云和云原生体系结构。同时允许CI/CD管理不同的业务和自动化流程。
+
+- Terraform vs Cloudify
+
+  a. terraform
+  - 支持大部分云平台并提供对主流服务提供厂商的兼容方案
+  - YAML-like 语言， 容易上手
+  - 快速启动， API轻量，适用于中小型部署
+  - 广泛应用, 甚至可以部署k8s
+  - - - 
+  - 
+
+  b. Cloudify
+  - 
 
 - blueprint 定义 YAML
 
@@ -133,10 +154,7 @@ Cons:
 ![preview](https://pic1.zhimg.com/v2-19a808f0d32b4ed9ec2eafe6f7d98a5c_r.jpg)
 
 ### 后端
-
-#### 蓝图编排 Cloudify VS Terraform
-
-
+尚不清楚, 需要后端童鞋协作调研!!!
 
 ## 未来或需要解决的困难
 - 功能设计
@@ -146,16 +164,14 @@ Cons:
 1. 后端如何定义并处理蓝图, 前后端的处理协作, 对 terraform 以及 cloudidy 需要进一步的调研
 2. UI 蓝图的实现技术的选择
 3. 未来可能会有技术痛点, 复杂交互或者性能渲染方面
+4. 尚不清楚 Terraform 和 Cloudify 的开源程度
 
-## Refs
-
+## 主要参考引用
 [Cloudify](https://cloudify.co/blog/what-is-tosca-cloud-application-orchestration-tutorial-cloudify/)
 
 [关于TOSCA](https://mp.weixin.qq.com/s/qsrJfpx0C5sWPA1YS9WJaA)
 
 [关于Terraform](http://www.cloudchef.io/h-nd-120.html#_np=129_991)
-
-[ZStack资源编排]()
 
 
 
