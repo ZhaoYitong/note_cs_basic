@@ -864,3 +864,114 @@ https://jestjs.io/docs/en/tutorial-react
 
 
 #### HOOK
+---- 只能在函数最外层调用 Hook。不要在循环、条件判断或者子函数中调用。
+
+`HOOK只能使用在function里, 可以继续保留 class 部分`
+- useState
+
+`use state`
+
+```javascript
+function ExampleWithManyStates() {
+  // 声明多个 state 变量！
+  const [age, setAge] = useState(42);
+  const [fruit, setFruit] = useState('banana');
+  const [todos, setTodos] = useState([{ text: 'Learn Hooks' }]);
+  // ...
+
+  
+  
+  // 解构理解
+  const [fruit, setFruit] = useState('banana');
+  // equals
+  var fruitStateVariable = useState('banana');
+  var fruit = fruitStateVariable[0]; // First value in array
+  var setFruit = fruitStateVariable[1]; // Second value in array
+
+}
+
+```
+
+- hook vs class
+
+```javascript
+// Below we use useState
+import React, { useState } from 'react';
+
+function Example() {
+  // 声明一个叫 "count" 的 state 变量
+  const [count, setCount] = useState(0); /* 通过setCount 可以更改 count */
+
+  return (
+    <div>
+      <p>You clicked {count} times</p>
+      <button onClick={() => setCount(count + 1)}>
+        Click me
+      </button>
+    </div>
+  );
+}
+
+// Equals
+
+// Below we use class
+class Example extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      count: 0
+    };
+  }
+
+  render() {
+    return (
+      <div>
+        <p>You clicked {this.state.count} times</p>
+        <button onClick={() => this.setState({ count: this.state.count + 1 })}>
+          Click me
+        </button>
+      </div>
+    );
+  }
+}
+
+```
+
+- useEffect
+
+`~ 给函数组件增加了操作副作用的能力。它跟 class 组件中的 componentDidMount、componentDidUpdate 和 componentWillUnmount 类似用途`
+
+```javascript
+import React, { useState, useEffect } from 'react';
+
+function FriendStatus(props) {
+  const [isOnline, setIsOnline] = useState(null);
+
+  function handleStatusChange(status) {
+    setIsOnline(status.isOnline);
+  }
+
+- // React 在完成DOM更改后运行, 它可以访问 props 和 state
+  useEffect(() => {
+    ChatAPI.subscribeToFriendStatus(props.friend.id, handleStatusChange);
+    return () => { // 这里处理销毁时 取消订阅
+      ChatAPI.unsubscribeFromFriendStatus(props.friend.id, handleStatusChange);
+    };
+  });
+
+  if (isOnline === null) {
+    return 'Loading...';
+  }
+  return isOnline ? 'Online' : 'Offline';
+}
+
+```
+
+无需清除的 effect
+
+
+
+- useContext
+
+
+- useReducer
