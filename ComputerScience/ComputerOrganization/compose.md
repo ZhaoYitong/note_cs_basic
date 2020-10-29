@@ -313,7 +313,7 @@ I/O: Input/Output equipment: 输入/输出设备, 为输入设备和输出设备
 
 
 
-![](C:\Users\Kerouac\Desktop\File\node_cs_basic\lib\img_compose\async_method.png)
+![](..\..\lib\img_compose\async_method.png)
 
 
 
@@ -321,7 +321,7 @@ I/O: Input/Output equipment: 输入/输出设备, 为输入设备和输出设备
 
 
 
-![](C:\Users\Kerouac\Desktop\File\node_cs_basic\lib\img_compose\memory_3_characters.png)
+![](..\..\lib\img_compose\memory_3_characters.png)
 
 
 
