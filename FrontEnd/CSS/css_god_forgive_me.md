@@ -60,4 +60,18 @@ const headerStyle: CSSProperties = {
 
   If the exact weight given is unavailable, then the following rule is used to determine the weight actually rendered [refs](https://developer.mozilla.org/en-US/docs/Web/CSS/font-weight)
 
-  
+
+
+#### Transform: translate
+
+```css
+.transform {
+    transform: translate(50%, 50%) /* (0,0) is located at left top corner of box, 50% means half of box to right, half of box to bottom */
+}
+
+/* an interview at bytedance  */
+
+```
+
+
+
