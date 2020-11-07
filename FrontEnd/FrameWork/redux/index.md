@@ -1,1 +1,0 @@
-![redux_data_flow](img\redux_data_flow.PNG)
