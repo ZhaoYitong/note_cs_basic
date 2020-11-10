@@ -673,3 +673,324 @@ let bar = <string>foo; // bar 的类型是 'string'
 
 
 `当 `S` 类型是 `T` 类型的子集，或者 `T` 类型是 `S` 类型的子集时，`S` 能被成功断言成 `T`。这是为了在进行类型断言时提供额外的安全性，完全毫无根据的断言是危险的，如果你想这么做，你可以使用 `any`。`
+
+
+
+#### 允许额外属性
+
+```typescript
+// assume
+interface State {
+    foo?: string;
+    bar?: string;
+}
+
+// 你可能想做
+this.setState({ foo: 'Hello' }); // Yay works fine!
+
+// 由于 Freshness，你也可以防止错别字
+this.setState({ foos: 'Hello' }}; // Error: 对象只能指定已知属性
+
+// 仍然会有类型检查
+this.setState({ foo: 123 }}; // Error: 无法将 number 类型赋值给 string 类型
+```
+
+#### 类型保护
+
+- instanceof
+
+  ```typescript
+  class Foo {
+    foo = 123;
+    common = '123';
+  }
+  
+  class Bar {
+    bar = 123;
+    common = '123';
+  }
+  
+  function doStuff(arg: Foo | Bar) {
+    if (arg instanceof Foo) {
+      console.log(arg.foo); // ok
+      console.log(arg.bar); // Error
+    }
+    if (arg instanceof Bar) {
+      console.log(arg.foo); // Error
+      console.log(arg.bar); // ok
+    }
+  }
+  
+  doStuff(new Foo());
+  doStuff(new Bar());
+  ```
+
+- in
+
+  ```typescript
+  interface A {
+    x: number;
+  }
+  
+  interface B {
+    y: string;
+  }
+  
+  function doStuff(q: A | B) {
+    if ('x' in q) {
+      // q: A
+    } else {
+      // q: B
+    }
+  }
+  ```
+
+  
+
+- 字面量类型保护
+
+  ```typescript
+  type Foo = {
+    kind: 'foo'; // 字面量类型
+    foo: number;
+  };
+  
+  type Bar = {
+    kind: 'bar'; // 字面量类型
+    bar: number;
+  };
+  
+  function doStuff(arg: Foo | Bar) {
+    if (arg.kind === 'foo') {
+      console.log(arg.foo); // ok
+      console.log(arg.bar); // Error
+    } else {
+      // 一定是 Bar
+      console.log(arg.foo); // Error
+      console.log(arg.bar); // ok
+    }
+  }
+  ```
+
+- 自定义类型保护
+
+  ```typescript
+  // 仅仅是一个 interface
+  interface Foo {
+    foo: number;
+    common: string;
+  }
+  
+  interface Bar {
+    bar: number;
+    common: string;
+  }
+  
+  // 用户自己定义的类型保护！
+  function isFoo(arg: Foo | Bar): arg is Foo {
+    return (arg as Foo).foo !== undefined;
+  }
+  
+  // 用户自己定义的类型保护使用用例：
+  function doStuff(arg: Foo | Bar) {
+    if (isFoo(arg)) {
+      console.log(arg.foo); // ok
+      console.log(arg.bar); // Error
+    } else {
+      console.log(arg.foo); // Error
+      console.log(arg.bar); // ok
+    }
+  }
+  
+  doStuff({ foo: 123, common: '123' });
+  doStuff({ bar: 123, common: '123' });
+  ```
+
+- 字面量类型
+
+  ```typescript
+  let foo: 'Hello';
+  foo = 'Bar'; // Error: 'bar' 不能赋值给类型 'Hello'
+  
+  type CardinalDirection = 'North' | 'East' | 'South' | 'West';
+  
+  function move(distance: number, direction: CardinalDirection) {
+      // ...
+  }
+  
+  move(1, 'North'); // OK
+  move(1, 'Nurth'); // Error
+  ```
+
+- 泛型
+
+  ```typescript
+  function reverse<T>(items: T[]): T[] {
+    const toreturn = [];
+    for (let i = items.length - 1; i >= 0; i--) {
+      toreturn.push(items[i]);
+    }
+    return toreturn;
+  }
+  
+  const sample = [1, 2, 3];
+  let reversed = reverse(sample);
+  
+  reversed[0] = '1'; // Error
+  reversed = ['1', '2']; // Error
+  
+  reversed[0] = 1; // ok
+  reversed = [1, 2]; // ok
+  ```
+
+- 类型推断
+
+  ```typescript
+  type Adder = (a: number, b: number) => number;
+  function iTakeAnAdder(adder: Adder) {
+    return adder(1, 2);
+  }
+  
+  iTakeAnAdder((a, b) => {
+    a = 'hello'; // Error: 不能把 'string' 类型赋值给 'number' 类型
+    return a + b;
+  });
+  
+  
+  // 结构化
+  const foo = {
+      a: 123,
+      b: 456
+  };
+  
+  foo.a = 'hello';  // Error：不能把 'string' 类型赋值给 'number' 类型
+  ```
+
+  
+
+- 结构化
+
+  ```typescript
+  interface Point2D {
+    x: number;
+    y: number;
+  }
+  
+  interface Point3D {
+    x: number;
+    y: number;
+    z: number;
+  }
+  
+  const point2D: Point2D = { x: 0, y: 10 };
+  const point3D: Point3D = { x: 0, y: 10, z: 20 };
+  function iTakePoint2D(point: Point2D) {
+    /* do something */
+  }
+  
+  iTakePoint2D(point2D); // ok, 完全匹配
+  iTakePoint2D(point3D); // 额外的信息，没关系
+  iTakePoint2D({ x: 0 }); // Error: 没有 'y'
+  ```
+
+  
+
+- 可选的和 rest 参数
+
+  ```typescript
+  let foo = (x: number, y: number) => {};
+  let bar = (x?: number, y?: number) => {};
+  let bas = (...args: number[]) => {};
+  
+  foo = bar = bas;
+  bas = bar = foo;
+  ```
+
+- 类
+
+  ```typescript
+  // 仅仅只有实例成员和方法会相比较，构造函数和静态成员不会被检查。
+  class Animal {
+    feet: number;
+    constructor(name: string, numFeet: number) {}
+  }
+  
+  class Size {
+    feet: number;
+    constructor(meters: number) {}
+  }
+  
+  let a: Animal;
+  let s: Size;
+  
+  a = s; // OK
+  s = a; // OK
+  
+  // 私有的和受保护的成员必须来自于相同的类。
+  class Animal {
+    protected feet: number;
+  }
+  class Cat extends Animal {}
+  
+  let animal: Animal;
+  let cat: Cat;
+  
+  animal = cat; // ok
+  cat = animal; // ok
+  
+  class Size {
+    protected feet: number;
+  }
+  
+  let size: Size;
+  
+  animal = size; // ERROR
+  size = animal; // ERROR
+  
+  ```
+
+
+
+
+#### JSX
+
+- HTML标签
+
+  ```jsx
+  declare namespace JSX {
+      interface IntrinsicElements {
+          a: React.HTMLAttributes;
+          abbr: React.HTMLAttributes;
+      }
+  }
+  ```
+
+- 函数式组件
+
+  ```jsx
+  type Props = {
+      foo: string;
+  }
+  
+  const MyComponent: React.FunctionComponent<Props> = props => {
+      return <span>{props.foo}</span>;
+  }
+  
+  <MyComponent foo="bar" />
+  ```
+
+  
+
+- React JSX 接收组件实例
+
+  ```jsx
+  class MyAwesomeComponent extends React.Component {
+      render() {
+          return <div>Hello</div>
+      }
+  }
+  
+  const foo: React.ReactElement<MyAwesomeComponent                 
+  ```
+
+  
