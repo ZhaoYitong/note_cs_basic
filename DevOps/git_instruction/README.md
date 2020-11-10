@@ -38,6 +38,23 @@ git checkout -b [localBranchName] [remoteBranchName]
 git branch -D [localBranchName0] [localBranchName1
 #删除本地分支，支持批量删除
 
+
+git checkout -b [newLocalBranchName]
+#新建一个本地分支, 无远程映射
+
+git push origin [existedLocalBranchName]:[existedLocalBranchName]
+#新建一个远程分支, 分支名称和本地一致
+
+git push origin :[remoteBranchName]
+#删除远程分支
+
+git push origin --delete [remoteBranchName]
+#删除远程分支
+
+git merge [anotherLocalBranch]
+#将另一个本地分支合并到当前分支, 出现冲突则先解决冲突. 
+#如远程分支test123 需要合并到 master主分支, 本地切换到 test123, 将本地master(最新) 合并到 test123, push 到远程(远程test123至最新), 后切换到本地master, merge 本地 test123
+
 #### 待补充
 git cherrypick ......
 ```
