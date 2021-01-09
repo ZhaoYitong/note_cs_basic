@@ -285,3 +285,91 @@ foo = function() {
 1. 必须有外部的封闭函数, 该函数必须至少被调用一次 (每次调用都会创建一个新的模块实例)
 
 2. 封闭函数必须返回至少一个内部函数, 这样内部函数才能在私有作用域中形成闭包, 并且可以访问或者修改私有的状态
+
+#### iterator && generator
+
+1. structure
+
+   ```bash
+   done (boolean)
+   Has the value false if the iterator was able to produce the next value in the sequence. (This is equivalent to not specifying the done property altogether.)
+   
+   Has the value true if the iterator has completed its sequence. In this case, value optionally specifies the return value of the iterator.
+   
+   value
+   Any JavaScript value returned by the iterator. Can be omitted when done is true.
+   ```
+
+   
+
+2. iterator protocol
+
+```javascript
+# A String is an example of a built-in iterable object
+const someString = 'hi';
+console.log(typeof someString[Symbol.iterator]); // "function"
+
+
+# String's default iterator returns the string's code points one by one
+const iterator = someString[Symbol.iterator]();
+console.log(iterator + ''); // "[object String Iterator]"
+
+console.log(iterator.next()); // { value: "h", done: false }
+console.log(iterator.next()); // { value: "i", done: false }
+console.log(iterator.next()); // { value: undefined, done: true }
+
+# built-in constructs (spread syntax) 
+console.log([...someString]); // ["h", "i"]
+
+# redefine the iteration behavior 
+
+// need to construct a String object explicitly to avoid auto-boxing
+const someString = new String('hi');
+
+someString[Symbol.iterator] = function () {
+  return {
+    // this is the iterator object, returning a single element (the string "bye")
+    next: function () {
+      return this._first ? {
+        value: 'bye',
+        done: (this._first = false)
+      } : {
+        done: true
+      }
+    },
+    _first: true
+  };
+};
+
+
+// create custom iterables
+const myIterable = {}
+myIterable =[Symbol.iterator] = function* () {
+    yield 1;
+    yield 2;
+    yield 3;
+};
+console.log([...myIterable]); // [1,2,3]
+
+
+// built-in iterables
+new Map([[1, 'a'], [2, 'b'], [3, 'c']]).get(2); // "b"
+
+const myObj = {};
+
+new WeakMap([
+    [{}, 'a'],
+    [myObj, 'b'],
+    [{}, 'c']
+]).get(myObj);             // "b"
+
+new Set([1, 2, 3]).has(3); // true
+new Set('123').has('2');   // true
+
+new WeakSet(function* () {
+    yield {}
+    yield myObj
+    yield {}
+}()).has(myObj);           // true
+```
+
