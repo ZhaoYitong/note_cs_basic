@@ -66,10 +66,20 @@ const headerStyle: CSSProperties = {
 
 ```css
 .transform {
-    transform: translate(50%, 50%) /* (0,0) is located at left top corner of box, 50% means half of box to right, half of box to bottom */
+    transform: translate(50%, 50%); /* (0,0) is located at left top corner of box, 50% means half of box to right, half of box to bottom */
 }
 
 /* an interview at bytedance  */
+
+.transform-origin {
+    transform-origin: top left; /* The default origin for the rotation is `50% 50%`(i.e the center) */
+}
+
+/* skew() https://www.quackit.com/css/functions/css_skew_function.cfm */
+.transform-with-skew {
+    transform: skew(10deg, 0);
+}
+
 
 ```
 
