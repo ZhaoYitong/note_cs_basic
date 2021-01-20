@@ -70,14 +70,26 @@ console.log(a);
 */
 /************/
 
-function getName() {
-    for(let i=0; i<5; i++) {
-        setTimeout(function(){
-            console.log(i);
-        }, i*1000);
-    }
+// function getName() {
+//     for(let i=0; i<5; i++) {
+//         setTimeout(function(){
+//             console.log(i);
+//         }, i*1000);
+//     }
 
-    return {name: 'ddd'};
-}
+//     return {name: 'ddd'};
+// }
 
-console.log(getName());
+// console.log(getName());
+
+// var person = {
+//     name: 'Brendan',
+//     hello: function(thing) {
+//         console.log(this + " say " + thing)
+//     }
+// }
+
+// person.hello("world")
+
+// person.hello.call(person, "world")
+

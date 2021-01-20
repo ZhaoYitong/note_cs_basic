@@ -373,3 +373,49 @@ new WeakSet(function* () {
 }()).has(myObj);           // true
 ```
 
+- understand this
+
+[understanding-javascript-function-invocation-and-this](https://yehudakatz.com/2011/08/11/understanding-javascript-function-invocation-and-this/)
+
+```javascript
+// function.call(thisArg, arg1, arg2, ...)
+function hello(thing) {
+  console.log(this + " says hello " + thing);
+}
+
+hello.call("Yehuda", "world") //=> Yehuda says hello world
+
+```
+
+```javascript
+
+// this:
+hello("world")
+
+// desugars to:
+hello.call(undefined, "world");
+
+// this is also true about functions declared inline
+
+var person = {
+    name: 'Brendan',
+    hello: function(thing) {
+        console.log(this + " say " + thing)
+    }
+}
+
+person.hello("world") // [object Object] say world
+person.hello.call(person, "world") // [object Object] say world
+
+// 
+function hello(thing) {
+    console.log(this + " says hello " + thing);
+}
+
+person = { name: "Brendan Eich" }
+person.hello = hello;
+
+person.hello("world") // still desugars to person.hello.call(person, "world")
+
+hello("world") // "[object DOMWindow]world"
+```

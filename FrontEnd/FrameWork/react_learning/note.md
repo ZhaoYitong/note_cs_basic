@@ -975,3 +975,14 @@ function FriendStatus(props) {
 
 
 - useReducer
+
+
+- 传递参数给事件处理器或回调
+```jsx
+
+<button onClick={() = > this.handleClick(id)} />
+
+// equals
+
+<button onclick={this.handleClick.bind(this, id)}>
+```
