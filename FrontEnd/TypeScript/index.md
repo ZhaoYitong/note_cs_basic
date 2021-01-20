@@ -994,3 +994,13 @@ this.setState({ foo: 123 }}; // Error: 无法将 number 类型赋值给 string �
   ```
 
   
+#### 类型约束示例
+
+- Object
+```typescript
+
+const entry: {[key: string]: string|Array<string>} = {
+  test: 'testString',
+  testArr: ['test1']
+}
+```
