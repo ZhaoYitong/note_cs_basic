@@ -1,0 +1,1 @@
+[从console中复制变量](https://stackoverflow.com/questions/10305365/javascript-chrome-how-to-copy-an-object-from-the-webkit-inspector-as-code)
