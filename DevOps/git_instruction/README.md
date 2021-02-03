@@ -55,6 +55,18 @@ git merge [anotherLocalBranch]
 #将另一个本地分支合并到当前分支, 出现冲突则先解决冲突. 
 #如远程分支test123 需要合并到 master主分支, 本地切换到 test123, 将本地master(最新) 合并到 test123, push 到远程(远程test123至最新), 后切换到本地master, merge 本地 test123
 
+
+git rm -r --cached .
+git add .
+git commit -m ".gitignore is now working"
+#.gitignore 不生效? 路径 + 文件名都没问题 -> git 的机制是如果对已经commit的文件再配置 gitignore, 那么ignore不会生效, 具体参考 
+https://stackoverflow.com/questions/25436312/gitignore-not-working
+
+
+To untrack a single file that has already been added/initialized to your repository, i.e., stop tracking the file but not delete it from your system use: git rm --cached filename
+​
+
+// git ignore 为什么不生效
 #### 待补充
 git cherrypick ......
 ```
