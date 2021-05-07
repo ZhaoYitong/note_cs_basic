@@ -71,3 +71,7 @@ To untrack a single file that has already been added/initialized to your reposit
 git cherrypick ......
 ```
 
+#### git 原理分析
+`.git`
+
+[其实Git比你以为的更简单 -- 原理篇] https://juejin.cn/post/6844903959178526734
