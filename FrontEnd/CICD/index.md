@@ -74,3 +74,38 @@ MyProject
 `npm3的项目中，可能存在一个问题就是你所依赖的一个package包更新了它peerDependencies的版本，那么你可能也需要在项目的package.json文件中手动更新到正确的版本。否则会出现类似下图所示的警告信息`
 
 ![warningPic](./img/peerDependencies.webp)
+
+#### package.json
+
+[package-json](https://docs.npmjs.com/cli/v7/configuring-npm/package-json)
+
+- devDependencies
+
+  `If someone is planning on downloading and using your module in their program, then they probably don't want or need to download and build the external test or documentation framework that you use.In this case, it's best to map these additional items in a devDependencies object.These things will be installed when doing npm link or npm install from the root of a package, and can be managed like any other npm configuration param. See config for more on the topic.For build steps that are not platform-specific, such as compiling CoffeeScript or other languages to JavaScript, use the prepare script to do this, and make the required package a devDependency.`
+
+  ```json
+  {
+    "name": "ethopia-waza",
+    "description": "a delightfully fruity coffee varietal",
+    "version": "1.2.3",
+    "devDependencies": {
+      "coffee-script": "~1.6.3"
+    },
+    "scripts": {
+      "prepare": "coffee -o lib/ -c src/waza.coffee"
+    },
+    "main": "lib/waza.js"
+  }
+  ```
+
+  - engines
+
+  `Specify the version of node that the stuf work on`
+
+  ```json
+  {
+    "engines": {
+      "node": ">=0.10.3 <15"
+    }
+  }
+  ```
