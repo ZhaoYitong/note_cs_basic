@@ -24,3 +24,6 @@
 - useRef 的 current 值，在 hooks 更新阶段不会变更，所以可以用于判断 hook 的加载卸载，ahooks 中的 useMount 就是用 useRef 实现
 
 - useContext 需要结合 Context Provider 使用，用于跨层获取祖先状态，umi 中 useModel 的实现利用了 context
+
+#### React Fiber
+
