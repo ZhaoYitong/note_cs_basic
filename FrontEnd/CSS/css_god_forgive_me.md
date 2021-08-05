@@ -88,3 +88,31 @@ const headerStyle: CSSProperties = {
 [HTML 获取屏幕、浏览器、页面的高度宽度](https://www.cnblogs.com/chris-oil/p/6662894.html)
 
 
+
+#### 实现从左到右(左上到右下)滚动展开盒子
+
+```html
+<style>
+    .parent {
+        width: 200px;
+        height: 200px;
+        overflow: hidden;
+        position: absolute;
+        z-index: 2;
+    }
+
+    .child {
+        position: absolute;
+        display: inline-flex;
+        z-index: 1;
+    }
+</style>
+
+<!-- change parent width from 0 to 200px, the child box when show gradually -->
+<div class="parent">
+    <div class="child">
+        This is child box, as parent's width change, box open
+    </div>
+</div>
+
+```
