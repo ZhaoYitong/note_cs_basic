@@ -419,3 +419,14 @@ person.hello("world") // still desugars to person.hello.call(person, "world")
 
 hello("world") // "[object DOMWindow]world"
 ```
+
+```javascript
+
+// window.open
+window.open(url, newWindowName)
+// use newWindowName in window.open
+
+window.opener
+// The Window interface's opener property returns a reference to the window that opened the window, either with open() , or by navigating a link with a target attribute. In other words, if window A opens window B , B.opener returns A .
+
+```
