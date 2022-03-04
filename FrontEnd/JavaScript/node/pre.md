@@ -258,7 +258,7 @@ exports = module.exports
 exports.a = 789
 ```
 
-
+[exports、module.exports AND export、export default](https://segmentfault.com/a/1190000010426778)
 
 
 
