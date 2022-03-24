@@ -31,6 +31,15 @@
     - forEach border
     - new Set
       - `Set 对象允许你存储任何类型的唯一值，无论是原始值或者是对象引用` -->
+
+#### 5. 最长回文子串
+  - time 20min
+  - try 2 times
+  - grade medium
+  - comment
+    - String.prototype.charAt(n)
+    - String.prototype.slice(?start, ?end)
+
 #### 2129.  将标题首字母大写
 - time 10 min
 - try 3 times

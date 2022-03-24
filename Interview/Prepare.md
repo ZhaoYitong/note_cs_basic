@@ -3,13 +3,102 @@
   - 网络
 
     - 涉及 nginx 部分, 待应用并理解
-    - 跨域
+    - 跨域 CORS
+      - Domain, scheme, port
+      - 请求的对应服务端是否开放对应白名单从而匹配 origin
+        - Allow-Same-Origin
     - https, http/2, http/3
     - 请求头, 协议, 标签
+      - http头
+        - Server-sent events `服务器可以偶尔推送消息到浏览器`
+          ```javascript
 
+          const evtSource = new EventSource("//api.example.com/ssedemo.php", { withCredentials: true } );
+
+          evtSource.onmessage = function(event) {
+          const newElement = document.createElement("li");
+          const eventList = document.getElementById("list");
+
+          newElement.textContent = "message: " + event.data;
+          eventList.appendChild(newElement);
+
+          evtSource.addEventListener("ping", function(event) {
+          const newElement = document.createElement("li");
+          const eventList = document.getElementById("list");
+          const time = JSON.parse(event.data).time;
+          newElement.textContent = "ping at " + time;
+          eventList.appendChild(newElement);
+          });
+          }
+          ```
+
+        - WebSocket `通过升级现有HTTP协议来建立`
+
+        - HTTP/2 vs HTTP/1.x
+          - HTTP/2基于二级制协议。不再可读。vs HTTP/1.X 文本协议
+          - 
+        - ajax
+          - 局部刷新, 早期是直接返回html
+          - 做一个请求
+
+            ```javascript
+              if (window.XMLHttpRequest) {
+                httpRequest = new XMLHttpRequest();
+              } else if (window.ActiveXObject) {
+                httpRequest = new ActiveXObject("Microsoft.XMLHTTP");
+              }
+
+              httpRequest.onreadystatechange = () => {
+                // do sth when res
+              }
+
+              httpRequest.open('GET', 'http://www.example.org/some', true)
+
+
+              httpRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+              if (httpRequest.readyState === XMLHttpRequest.DONE) {
+                  // Everything is good, the response was received.
+              } else {
+                  // Not ready yet.
+              }
+
+              if (httpRequest.status === 200) {
+                  // Perfect!
+              } else {
+                  // There was a problem with the request.
+                  // For example, the response may have a 404 (Not Found)
+                  // or 500 (Internal Server Error) response code.
+              }
+
+            ```
+
+          - Server-sent 事件
+
+          - Fetch
+            - fetch vs ajax
+
+              当接收到一个代表错误的 HTTP 状态码时，从 fetch() 返回的 Promise 不会被标记为 reject，即使响应的 HTTP 状态码是 404 或 500。相反，它会将 Promise 状态标记为 resolve （如果响应的 HTTP 状态码不在 200 - 299 的范围内，则设置 resolve 返回值的 ok 属性为 false ），仅当网络故障时或请求被阻止时，才会标记为 reject。
+
+              fetch 不会发送跨域 cookies，除非你使用了 credentials 的初始化选项。（自2018 年 8 月以后，默认的 credentials 政策变更为 same-origin
+
+              fetch 返回 promise
+          - cookie
+
+          - cache
+            ```javascript
+              http://foo.com/bar.html -> http://foo.com/bar.html?12345
+              http://foo.com/bar.html?foobar=baz -> http://foo.com/bar.html?foobar=baz&12345
+
+            ```
+
+
+    - 文件上传?
+     - 断点续传 ?
   - 安全
 
     - http 证书
+       - https://www.cloudflare.com/en-gb/learning/ssl/what-is-https/
     - 加密
     - 鉴权
     - 拦截
@@ -133,6 +222,12 @@
       - 静态文件获取, 配置代理, 原理解析
 
       - index.html 执行顺序
+
+      - 渲染，重绘，重排
+
+      - 性能分析
+        - performance
+        - network
 
       <!-- -  -->
 
