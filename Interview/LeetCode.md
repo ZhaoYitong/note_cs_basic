@@ -39,7 +39,9 @@
   - comment
     - String.prototype.charAt(n)
     - String.prototype.slice(?start, ?end)
-
+      - 'abcd'.slice(1,1)  ''
+      - 'abcd'.slice(0,1)  'a'
+    - [由中心向两端扩散](https://leetcode-cn.com/problems/longest-palindromic-substring/solution/zui-chang-hui-wen-chuan-shi-yong-shuang-cc725/)
 #### 2129.  将标题首字母大写
 - time 10 min
 - try 3 times
