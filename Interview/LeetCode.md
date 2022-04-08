@@ -42,6 +42,13 @@
       - 'abcd'.slice(1,1)  ''
       - 'abcd'.slice(0,1)  'a'
     - [由中心向两端扩散](https://leetcode-cn.com/problems/longest-palindromic-substring/solution/zui-chang-hui-wen-chuan-shi-yong-shuang-cc725/)
+
+#### 6. Z 字形变换
+  - time 60min
+  - try <font color="red">failed</font>
+  - grade medium
+  - comment
+    - Array.fill()
 #### 2129.  将标题首字母大写
 - time 10 min
 - try 3 times
