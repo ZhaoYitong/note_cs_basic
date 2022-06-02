@@ -29,5 +29,19 @@ Java Notes
   - Names are case sensitive ("myVar" and "myvar" are different variables)
   - Reserved words (like Java keywords, such as int or boolean) cannot be used as names
 
+- Non-Primitive Data Types
+  - Non-primitive data types are called reference types because they refer to objects.
+    - Primitive types are predefined (already defined) in Java. Non-primitive types are created by the programmer and is not defined by Java (except for String).
+    - Non-primitive types can be used to call methods to perform certain operations, while primitive types cannot.
+    - A primitive type has always a value, while non-primitive types can be null.
+    - A primitive type starts with a lowercase letter, while non-primitive types starts with an uppercase letter.
+    - The size of a primitive type depends on the data type, while non-primitive types have all the same size.
 
-<!-- TODO: https://www.w3schools.com/java/java_data_types_numbers.asp -->
+- Java Type Casting
+  - Widening Casting(auto) - converting a smaller type to a larger type size
+    - byte -> short -> char -> int -> long -> float -> double
+  - Narrow Casting(manually) - converting a larger type to a smaller size type
+    - double -> float -> long -> int -> char -> short -> byte
+
+- Java Operators
+  - 
