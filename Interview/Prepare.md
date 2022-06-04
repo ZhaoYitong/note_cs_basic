@@ -279,6 +279,7 @@
       - webpack
 
       - babel
+        - [babel编译基本原理](https://juejin.cn/post/7078482623387402271)
 
       - yarn build
 
