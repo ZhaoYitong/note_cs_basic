@@ -50,5 +50,5 @@
   ```
   
   - preload 和 prefetch 差异
-    - 参考
+    - 参考 [浏览器渲染优先级](../../Browser/render.md#浏览器页面资源加载过程与优化)
 
