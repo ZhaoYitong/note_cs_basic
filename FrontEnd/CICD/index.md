@@ -109,3 +109,40 @@ MyProject
     }
   }
   ```
+
+
+  #### npm 私有依赖内置到当前项目代码
+
+  `如果当前项目中部分依赖来自私有仓库，而三方人员想要使用该包的部分功能，那么需要本地化私有依赖`
+
+  ```json
+    // 处理前
+    "@xxxx/connected-react-router": "^6.5.2",
+    "@xxxx/eslint-plugin": "^0.0.3",
+    "@xxxx/father-build": "^1.x",
+
+    // 处理后
+    "@xxxx/connected-react-router": "file:local_modules/connected-react-router",
+    "@xxxx/eslint-plugin": "file:local_modules/eslint-plugin",
+    "@xxxx/father-build": "file:local_modules/father-build",
+
+    // 主要利用webpack打包已经支持的file路径映射到本地, build时只要找到到对应的依赖打包即可
+
+  ```
+
+
+  #### .npmrc 配置
+  
+  `通常用于当前项目拉取依赖时的依赖包拉取镜像点注册`
+
+  ```bash
+
+  # 如注册淘宝镜像
+  registry=https://registry.npm.taobao.org/
+
+  # 针对部分依赖包的拉取配置单独的镜像
+
+  @xxxx/father-build:registry=http://ui.xxxx.io:3005
+  @xxxx/eslint-plugin:registry=http://ui.xxxx.io:3005
+
+  ```
