@@ -1,4 +1,4 @@
-export.whatIs = function (what) {
+const whatIs = function (what) {
 
     var to = typeof what;
 

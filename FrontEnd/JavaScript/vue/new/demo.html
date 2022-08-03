@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        {{msg}}
+    </div>
+
+    <script type="text/javascript">
+		var data = {a: 11};
+        var app = new Vue({
+            el: '#app',
+            data: data
+        });
+		data.b = 'test';
+		app.$data.a = 'test...';
+		app.$watch('a', (newValue, oldVal) => {
+			console.log(newValue, oldVal);
+		})
+    </script>
+</body>
+</html>
