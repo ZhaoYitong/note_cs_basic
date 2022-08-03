@@ -51,6 +51,6 @@ var judgeCircle = function(moves) {
         obj[move]++;
         console.log(obj[move])
     }
-    return obj['L'] === obj['R'] && obj['U'] ==== obj['D'];
+    return obj['L'] === obj['R'] && obj['U'] === obj['D'];
 };
  console.log(judgeCircle("UD"));
