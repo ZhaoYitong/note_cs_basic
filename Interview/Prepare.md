@@ -277,7 +277,7 @@
           - 原理
           - 性能
 
-        - (待补充....)
+        - 优先级管理
 
     - 浏览器
 
@@ -397,6 +397,25 @@
         - .husky
           - commit-msg
           - pre-commit
+        - .git
+          - 内部结构
+            - hooks
+              - 示例
+            - info
+            - logs
+              - refs
+                - heads
+                - remotes/orgin
+            - objects
+            - refs
+            - COMMIT_EDITMSG
+            - config
+            - description
+            - FETCH_HEAD
+            - HEAD
+            - index
+            - ORIG_HEAD
+            - packed-refs
 
     - 私有/独立依赖
 
