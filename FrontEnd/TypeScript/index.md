@@ -7,9 +7,10 @@
 ####  编译上下文
 
 `tsconfig.json`
-
+ https://www.typescriptlang.org/tsconfig
 ```json
 {
+  "extends": "./configs/base",             // 继承于相关配置
   "compilerOptions": {
 
     /* 基本选项 */
