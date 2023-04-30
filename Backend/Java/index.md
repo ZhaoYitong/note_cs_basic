@@ -45,3 +45,7 @@ Java Notes
 
 - Java Operators
   - 
+
+- The switch Statement
+  - case fall-through
+    - the lack of break statements in each case leads to case fall-through behavior. 
