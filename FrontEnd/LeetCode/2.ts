@@ -13,89 +13,65 @@ class ListNode {
     val: number
     next: ListNode | null
     constructor(val?: number, next?: ListNode | null) {
-        this.val = (val === undefined ? 0 : val);
-        this.next
+        this.val = (val === undefined ? 0 : val)
+        this.next = (next === undefined ? null : next)
     }
 }
 
-function addTwoNumbers(l1: ListNode | null, l2: ListNode | null): ListNode | null {
-    // 6342 + 465 = 6807
-    // 2 -> 4 -> 3 -> 6
-    // 5 -> 6 -> 4
-    // 7 -> 0 -> 8 -> 6
-
-    // 遍历短链表，多余部分再单独加
-    // 注意进位
-    const lenL1 = calListLength(l1)
-    const lenL2 = calListLength(l2)
-    const shortestLen = Math.min(lenL1, lenL2)
-    let addonList: ListNode | null = new ListNode()
-    for (let i = 0; i < shortestLen; i++) {
-        // addonList.val = currentVal;
-        // addonList.next = 
-    }
-
-    return null
+// 链表，递归生成，大数限制
+function addTwoNumbers(l1: ListNode, l2: ListNode): ListNode | null {
+    let result = new ListNode()
+    gNode(l1, l2, result, 0)
+    return result
 };
 
-const calListLength = (list: ListNode | null) => {
-    let count = 0;
-    let newList = list;
-    while (newList?.val) {
-        count++;
-        newList = newList.next
+const gNode = (list1: ListNode | null, list2: ListNode | null, item: ListNode, valAddon: number) => {
+    let newVal = item.val + valAddon
+    let newNext1: ListNode | null = null
+    let newNext2: ListNode | null = null
+    if (list1) {
+        newVal = list1.val + newVal
+        newNext1 = list1.next
     }
-    return count
-}
-
-const findNodeByIndex = (list: ListNode | null, idx: number) => {
-    let count = 0;
-    let resultNode = list
-    if (list) {
-        while (count < idx) {
-            resultNode = list.next;
-            count++;
-        }
+    if (list2) {
+        newVal = list2.val + newVal
+        newNext2 = list2.next
     }
-    return resultNode
-}
+    const nodeVal = newVal % 10
+    const nextAddon = newVal >= 10 ? 1 : 0
+    item.val = nodeVal
+    const nextNode = new ListNode()
 
-// TODO:
-const getNextAddons = (
-    currentList: ListNode | null,
-    preAddonNum: number,
-    addon1: ListNode | null,
-    addon2: ListNode | null
-) => {
-    let newList = currentList
-    if (newList) {
-        while (newList?.next) {
-            newList = newList.next
-        }
-        const { nextAddon, currentVal } = calNodeValAddon(addon1, addon2, preAddonNum)
-        newList.val = currentVal
-        newList.next = null
-        return {
-            newList,
-            nextAddon
-        }
-    } else {
-        return {
-            newList: null,
-            nextAddon: 0
-        }
+    if (newNext1 || newNext2 || nextAddon) {
+        item.next = nextNode
+        gNode(newNext1, newNext2, nextNode, nextAddon)
     }
 }
 
-const calNodeValAddon = (node1: ListNode | null, node2: ListNode | null, append: number) => {
-    const num1 = node1?.val || 0;
-    const num2 = node2?.val || 0;
-    const sum = num1 + num2 + append;
-    const nextAddon = sum >= 10 ? 1 : 0;
-    const currentVal = sum % 10;
-    return {
-        nextAddon,
-        currentVal
+// solution 2
+var addTwoNumbers2 = function (l1, l2) {
+    const preHead = new ListNode();
+    let cur = preHead;
+    let carry = 0;
+    while (l1 || l2) {
+      const val1 = l1 ? l1.val : 0;
+      const val2 = l2 ? l2.val : 0;
+      const sum = val1 + val2 + carry;
+  
+      cur.next = new ListNode(sum % 10);
+      cur = cur.next;
+  
+      carry = Math.floor(sum / 10);
+      
+      if (l1) {
+        l1 = l1.next;
+      }
+      if (l2) {
+        l2 = l2.next;
+      }
     }
-}
-
+    if (carry > 0) {
+      cur.next = new ListNode(carry);
+    }
+    return preHead.next;
+  };
