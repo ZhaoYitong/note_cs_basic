@@ -1,3 +1,4 @@
 - TODO: 
     - 3.ts
+    - 6.ts method-2
     - 93.ts
