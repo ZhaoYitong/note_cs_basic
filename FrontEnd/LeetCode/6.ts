@@ -11,7 +11,7 @@ function convert(s: string, numRows: number): string {
     if (s.length <= numRows) {
         return s
     } else {
-        let resultMap: Record<number, Record<number, string>> = {
+        let resultMap: Record<string, Record<string, string>> = {
             0: {
                 0: ''
             }
@@ -76,3 +76,46 @@ function convert(s: string, numRows: number): string {
 // 1 2 3 4 3 2 1 2 3 4 3 2 1 2 3 4 3 2 1....
 // a b c d e f g h i j k l m n o p q r s....
 // 那么对字符串遍历，设置对应报数号，就可以得到对应的行数，最终从第1行到第 maxRowNum 行输出结果
+// 预计和方法一实现类似，但更简洁
+
+/////////////////////////////////////////////////////////////////////
+
+// T O(n) S O(n)
+// 另一种思路，单个v的长度为 numRows * 2 - 2，以此为周期，遍历字符串，输出结果，复杂度较优。但这种方法的构思过程略繁琐，不直观
+function convert1(s: string, numRows: number): string {
+    // 12343212343212....
+    // 1 7 13 19
+    // 2 6 8 
+    // 12321232123...
+    // 单个v 占据 numRows *2 -2 个字符
+    // 0    
+    // 1            1+(numRows-1)*2 - 2
+    // 2            2+(numRows-2)*2 - 2
+    // ...
+    // numRows-1    numRows-1+(numRows-(numRows-1))*2 - 2
+
+    if (numRows <= 1 || s.length <= numRows) {
+        return s
+    } else {
+        let newS = ''
+        let currentRowCol = 0
+        let singleVLen = numRows * 2 - 2
+        for (let i = 0; i < numRows; i++) {
+            // 已知由英文字母（小写和大写）、',' 和 '.' 组成
+            let middleLoc = [i, i===0 || i===numRows -1 ? i : i + (numRows - i) * 2 - 2]
+            currentRowCol = middleLoc[0]
+            while (s[currentRowCol]) {
+                newS += s[currentRowCol]
+                if (middleLoc[0] !== middleLoc[1]) {
+                    if (s[middleLoc[1]]) {
+                        newS += s[middleLoc[1]]
+                    }
+                }
+                middleLoc = [middleLoc[0] + singleVLen, middleLoc[1] + singleVLen]
+                currentRowCol = middleLoc[0]
+            }
+        }
+        return newS
+    }
+};
+
