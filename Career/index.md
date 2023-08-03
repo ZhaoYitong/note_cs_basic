@@ -1,0 +1,2 @@
+- Circle CI 
+  - [工程胜任能力矩阵](https://github.com/spring2go/engineer_competency_framework)

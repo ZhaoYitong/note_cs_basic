@@ -1,0 +1,2 @@
+- CPU制造
+    - [从一粒沙子到芯片的故事](https://plantegg.github.io/2021/06/01/CPU%E7%9A%84%E5%88%B6%E9%80%A0%E5%92%8C%E6%A6%82%E5%BF%B5/)
