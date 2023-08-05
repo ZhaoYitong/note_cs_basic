@@ -1,4 +1,5 @@
 - TODO: 
-    - 3.ts
-    - 7.ts - method 2 
+    - 4.ts - hard
+    - 7.ts - method 2
+    - 8.ts
     - 93.ts
