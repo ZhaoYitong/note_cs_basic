@@ -115,3 +115,21 @@ const headerStyle: CSSProperties = {
 </div>
 
 ```
+
+
+#### css动画设置提前进入播放状态
+
+```style
+// 指定transition-delay 为负值x
+// 这时0s表示上一个动画循环刚结束，负值x的状态，即从动画循环刚结束的时刻倒放，类似倒带播放的模式，倒带x时间段对应的状态为对应页面元素的初始挂载状态
+
+.test-animation-delay {
+    transition-delay: -2s;
+}
+
+// 本例中将会从上一个动画循环的最后2s开始，如果一个动画循环周期小于2s,则
+```
+
+[css-transition-delay-with-a-negative-value](https://stackoverflow.com/questions/41432527/css-transition-delay-with-a-negative-value)
+
+[animation-delay negative value](https://codepen.io/zhaoyitong/pen/GRwLKJL)
