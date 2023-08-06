@@ -1,3 +1,4 @@
+
 #### Effective Javascript ~ David Herman
 
 - Item 3: Beware of Implicit Coercions
