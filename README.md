@@ -5,4 +5,4 @@
 
 
 - Algorithm
-    - [LeetCoding on the road](./Algorithm//Blog/index.md)
+    - [LeetCoding on the road](./ComputerScience/DataStrutureAndAlgorithm/LeetCode/index.md)
