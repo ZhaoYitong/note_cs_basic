@@ -1,7 +1,9 @@
 #### Notes, training, views, and thoughts on the developing road
 
 - FrontEnd
-    - [FrontEnd Blog](./FrontEnd//Blog/index.md)
+    - [FrontEnd Blog](./FrontEnd/AmazingSharing/Blogs/index.md)
+
+    - [Learning](./FrontEnd/AmazingSharing/Articles/index.md)
 
 
 - Algorithm
