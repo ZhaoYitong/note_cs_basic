@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      .tangram {
+        width: 600px;
+        height: 600px;
+        border: 1px solid black;
+        position: relative;
+      }
+
+      .big-triangle,
+      .middle-triangle,
+      .small-triangle {
+        position: absolute;
+        width: 0;
+        height: 0;
+      }
+
+      .big-triangle {
+        border: 300px solid transparent;
+      }
+
+      .small-triangle {
+        border: 150px solid transparent;
+      }
+
+      .middle-triangle {
+        /* 150 *根号2  = 212px*/
+        border: 212px solid transparent;
+        border-top-color: orangered;
+        transform: rotate(-45deg);
+        left: calc(600px - 212px);
+        top: calc(600px - 212px);
+      }
+
+      .big-triangle.triangle1 {
+        border-top-color: green;
+      }
+      .big-triangle.triangle2 {
+        border-left-color: red;
+      }
+
+      .small-triangle.triangle1 {
+        border-right-color: brown;
+        left: calc(600px / 2);
+      }
+      .small-triangle.triangle2 {
+        border-left-color: purple;
+        left: calc(600px / 4);
+        top: calc(600px / 4);
+        transform: rotate(-90deg);
+      }
+
+      .small-1 {
+        width: 0;
+        height: 0;
+        border-left: 150px solid transparent;
+        border-right: 150px solid transparent;
+        border-top: 150px solid blue;
+        bottom: 0;
+        left: 0;
+      }
+
+      .small-2 {
+        width: 0;
+        height: 0;
+        border-top: 150px solid green;
+        border-left: 150px solid transparent;
+        border-right: 150px solid transparent;
+        bottom: 0;
+        right: 0;
+      }
+
+      .parallelogram {
+        position: absolute;
+        width: 300px;
+        height: 150px;
+        transform: skewX(-45deg);
+        transform-origin: bottom left;
+        background: blue;
+        left: 0;
+        top: 450px;
+      }
+
+      .square {
+        position: absolute;
+        z-index: 1000;
+        width: 212px;
+        height: 212px;
+        transform: rotate(45deg);
+        background: yellow;
+        top: calc(300px - 212px / 2);
+        left: calc(300px - 106px + 150px);
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="tangram">
+      <div class="big-triangle triangle1"></div>
+      <div class="big-triangle triangle2"></div>
+      <div class="middle-triangle"></div>
+      <div class="small-triangle triangle1"></div>
+      <div class="small-triangle triangle2"></div>
+      <div class="square"></div>
+      <div class="parallelogram"></div>
+    </div>
+  </body>
+</html>
