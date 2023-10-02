@@ -3,6 +3,7 @@
     - 7.ts - method 2
     - 8.ts
     - 11.ts - again
-    - 26.ts
+    - 26.ts - again
     - 27.ts
+    - 28.ts - KMP
     - 93.ts
