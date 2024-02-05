@@ -8,3 +8,4 @@
     - 28.ts - KMP
     - 70.ts - again
     - 93.ts
+    - 94.ts - stack
