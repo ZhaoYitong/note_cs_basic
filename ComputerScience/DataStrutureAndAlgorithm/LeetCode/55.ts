@@ -22,3 +22,16 @@ function canJump1(nums: number[]): boolean {
     }
     return reach >= L - 1
 };
+
+// Solution2: T O(n)
+// 倒序遍历
+function canJump2(nums: number[]): boolean {
+    const L = nums.length
+    let last = L - 1
+    for (let i = L - 2; i>=0; i--) {
+        if (i+nums[i] >= last) {
+            last = i
+        }
+    }
+    return last === 0
+};
