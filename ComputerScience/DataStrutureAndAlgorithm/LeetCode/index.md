@@ -6,6 +6,7 @@
     - 26.ts - again
     - 27.ts
     - 28.ts - KMP
+    - 36.ts - 理解多维数组初始化和使用 again
     - 46.ts - 官方解法什么鬼，复杂度提升了?
     - 64.ts - again
     - 70.ts - again
