@@ -69,3 +69,24 @@ customPromiseRace([p1, p2]).then(values => {
 }).catch(e => {
     console.log('e', e)
 })
+
+//////////////////////////////////////////////////
+// 手写 promise.any
+
+const customPromiseAny = (values: any[]): Promise<any> => {
+    let len = values.length
+    let errs: any[] = new Array(len)
+    return new Promise((resolve, reject) => {
+        values.forEach((it, idx) => {
+            it.then(v => {
+                resolve(v)
+            }, err => {
+                len--
+                errs[idx] = err
+                if (len === 0) {
+                    reject('all rejected')
+                }
+            })
+        })
+    })
+}
